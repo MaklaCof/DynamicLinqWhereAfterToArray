@@ -13,7 +13,7 @@ namespace DynamicLinqWhereAfterToArray
     class Program
     {
         private MyContext _context;
-        public const string ConnectionString = @"ENTER";
+        public const string ConnectionString = @"ENTER!!!";
 
         static void Main(string[] args)
         {
@@ -36,20 +36,24 @@ namespace DynamicLinqWhereAfterToArray
             await this.GenerateData(100);
 
             //Option 1
-            var data0 = await this._context.Set(typeof(Entity1)).Where("Id<10").ToArrayAsync();        //Works
-            var data1 = await this._context.Set(typeof(Entity1)).ToDynamicArrayAsync();        //Works
-            var data2 = data1.AsQueryable().Where("Id<10").FirstOrDefault();          //Doesn't work.
+            //var data0 = await this._context.Set(typeof(Entity1)).Where("Id<10").ToArrayAsync();        //Works
+            //var data1 = await this._context.Set(typeof(Entity1)).ToDynamicArrayAsync();        //Works
+            //var data2 = data1.AsQueryable().Where("Id<10").FirstOrDefault();          //Doesn't work.
 
             //Option 2
-            data0 = await this._context.Set(typeof(Entity1)).Where("Id<10").ToDynamicArrayAsync<object>();        //Works
-            data1 = await this._context.Set(typeof(Entity1)).ToDynamicArrayAsync();        //Works
-            data2 = data1.AsQueryable().Where("Id<10").FirstOrDefault();          //Doesn't work.
+            //data0 = await this._context.Set(typeof(Entity1)).Where("Id<10").ToDynamicArrayAsync<object>();        //Works
+            //data1 = await this._context.Set(typeof(Entity1)).ToDynamicArrayAsync();        //Works
+            //data2 = data1.AsQueryable().Where("Id<10").FirstOrDefault();          //Doesn't work.
 
-            //Option 3
-            data0 = await this._context.Set(typeof(Entity1)).Where("Id<10").ToDynamicArrayAsync();        //Works
-            data1 = await this._context.Set(typeof(Entity1)).ToDynamicArrayAsync();        //Works
-            data2 = data1.AsQueryable().Where("Id<10").FirstOrDefault();          //Doesn't work.
+            //Option 3.1
+            var data0 = await this._context.Set(typeof(Entity1)).Where("Id<10").ToDynamicArrayAsync();     //Works
+            var data1 = await this._context.Set(typeof(Entity1)).ToDynamicArrayAsync();                             //Works
+            var data2 = data1.AsQueryable().Where("Id<10").FirstOrDefault();                                 //Doesn't work: One or more errors occurred. (Operator '<' incompatible with operand types 'Object' and 'Int32')
 
+            //Option 3.2
+            data0 = await this._context.Set(typeof(Entity1)).Where("Id<10").ToDynamicArrayAsync();      //Works
+            data1 = await this._context.Set(typeof(Entity1)).ToDynamicArrayAsync();                              //Works
+            data2 = data1.AsQueryable().Where("Url=@0", "Test").FirstOrDefault();               //Doesn't work: One or more errors occurred. (Target object is not an ExpandoObject)
 
         }
 
